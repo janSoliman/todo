@@ -11,12 +11,17 @@ import UIKit
 class toDoViewController: UITableViewController {
 
     var ItemArray = [ "Help Jan", "Help Rina", "Help Freddy", "go to work" ]
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        //MARK - Table 
+        //MARK - Table
+        ItemArray = defaults.array(forKey: "toDoListArray") as! [String]
+        if let items = defaults.array(forKey: "toDoListArray") as? [String] {
+            ItemArray = items
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -61,7 +66,8 @@ class toDoViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
        self.ItemArray.append(textField.text!)
-        self.tableView.reloadData()
+            self.defaults.set(self.ItemArray, forKey: "toDoListArray")
+            self.tableView.reloadData()
         }
         
             alert.addTextField { (alertTextField) in
